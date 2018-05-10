@@ -4,3 +4,6 @@ C:\Users\Tanusha\Documents\Recallection\CarParking\CarParking\bin\Debug\CarParki
 C:\Users\Tanusha\Documents\Recallection\CarParking\CarParking\obj\Debug\CarParking.csprojResolveAssemblyReference.cache
 C:\Users\Tanusha\Documents\Recallection\CarParking\CarParking\obj\Debug\CarParking.exe
 C:\Users\Tanusha\Documents\Recallection\CarParking\CarParking\obj\Debug\CarParking.pdb
+C:\Users\Tanusha\Documents\GitHub\ParkingProject\CarParking\CarParking\bin\Debug\CarParking.exe.config
+C:\Users\Tanusha\Documents\GitHub\ParkingProject\CarParking\CarParking\obj\Debug\CarParking.exe
+C:\Users\Tanusha\Documents\GitHub\ParkingProject\CarParking\CarParking\obj\Debug\CarParking.pdb
