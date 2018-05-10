@@ -8,9 +8,6 @@ namespace CarParking
 		private static Menu menu = new Menu();
 		static void Main(string[] args)
 		{
-			//Action<string> PushMessageAction = new Action<string>(PushMessage);
-
-			//menu.ShowMenu(PushMessageAction);
 			Parking carParking = Parking.Instance;
 			Console.ReadLine();
 
