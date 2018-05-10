@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Car.cs" />
     <Compile Include="Classes\Parking.cs" />
     <Compile Include="Classes\Settings.cs" />
     <Compile Include="Interfaces\ICar.cs" />
