@@ -5,148 +5,103 @@ using System.IO;
 
 namespace CarParking.Classes
 {
-	class Parking : IPark
-	{
-		private static readonly Lazy<Parking> instance = new Lazy<Parking>(() => new Parking());
-		private Parking()
-		{
-			Settings.SetSettings(this);
-		}
-		public static Parking Instance { get { return instance.Value; } }
+    class Parking : IPark
+    {
+        private static readonly Lazy<Parking> instance = new Lazy<Parking>(() => new Parking());
+        private Parking()
+        {
+            Settings.SetSettings(this);
+            Cars = new List<ICar>();
+            Transactions = new List<ITransaction>();
+
+        }
+        public static Parking Instance { get { return instance.Value; } }
 
 
-		#region IPark Members
+        #region IPark Members
 
-		public int TimeOut
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-			set
-			{
-				throw new NotImplementedException();
-			}
-		}
+        public int TimeOut { get; set; }
 
-		public Dictionary<CarType, double> Prices
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-			set
-			{
-				throw new NotImplementedException();
-			}
-		}
+        public Dictionary<CarType, double> Prices { get; set; }
 
-		public float Fine
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-			set
-			{
-				throw new NotImplementedException();
-			}
-		}
+        public float Fine { get; set; }
 
-		public int ParkingSpace
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-			set
-			{
-				throw new NotImplementedException();
-			}
-		}
+        public int ParkingSpace { get; set; }
 
-		public List<ICar> Cars
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-			set
-			{
-				throw new NotImplementedException();
-			}
-		}
+        public List<ICar> Cars { get; set; }
 
-		public List<ITransaction> Transactions
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-			set
-			{
-				throw new NotImplementedException();
-			}
-		}
+        public List<ITransaction> Transactions { get; set; }
 
-		private void WriteToLog(string message)
-		{
-			string folderpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-			string filepath = Path.Combine(folderpath, "Transactions.log");
+        private void WriteToLog(string message)
+        {
+            string folderpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string filepath = Path.Combine(folderpath, "Transactions.log");
 
-			if (File.Exists(filepath))
-			{
-				using (StreamWriter outputFile = new StreamWriter(filepath, true))
-				{
-					outputFile.WriteLine(message);
-				}
-			}
-			else
-			{
-				using (StreamWriter outputFile = new StreamWriter(filepath))
-				{
-					outputFile.WriteLine(message);
-				}
-			}
+            if (File.Exists(filepath))
+            {
+                using (StreamWriter outputFile = new StreamWriter(filepath, true))
+                {
+                    outputFile.WriteLine(message);
+                }
+            }
+            else
+            {
+                using (StreamWriter outputFile = new StreamWriter(filepath))
+                {
+                    outputFile.WriteLine(message);
+                }
+            }
 
 
-		}
+        }
 
-		public bool AddCar(ICar car)
-		{
-			throw new NotImplementedException();
-		}
+        public bool AddCar(ICar car)
+        {
+            throw new NotImplementedException();
+        }
 
-		public bool RemoveCar(ICar car)
-		{
-			throw new NotImplementedException();
-		}
+        public bool RemoveCar(ICar car)
+        {
+            throw new NotImplementedException();
+        }
 
-		public bool AddToBalance(ICar car, double amount)
-		{
-			throw new NotImplementedException();
-		}
+        public bool AddToBalance(ICar car, double amount)
+        {
+            throw new NotImplementedException();
+        }
 
-		public string ShowTransactionsFor(int minute = 1)
-		{
-			throw new NotImplementedException();
-		}
+        public string ShowTransactionsFor(int minute = 1)
+        {
+            throw new NotImplementedException();
+        }
 
-		public string ShowIncome()
-		{
-			throw new NotImplementedException();
-		}
+        public string ShowIncome()
+        {
+            throw new NotImplementedException();
+        }
 
-		public string ShowFreePlaces()
-		{
-			throw new NotImplementedException();
-		}
+        public string ShowFreePlaces()
+        {
+            throw new NotImplementedException();
+        }
 
-		public string ShowLog()
-		{
-			throw new NotImplementedException();
-		}
+        public string[] ShowLog()
+        {
+            string[] readLog = new string[] { String.Empty };
+            string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string filePath = Path.Combine(folderPath, "Transactions.log");
 
-		#endregion
-	}
+            if (File.Exists(filePath))
+            {
+                readLog = File.ReadAllLines(filePath);
+                return readLog;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        #endregion
+    }
 }
