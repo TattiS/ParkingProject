@@ -25,43 +25,43 @@ namespace CarParking
                     case ConsoleKey.A:
                         Console.Clear();
                         ShowAddMenu();
-                        Console.ReadLine();
+                        Console.ReadKey();
                         break;
                     case ConsoleKey.B:
                         Console.Clear();
                         RemoveCar();
-                        Console.ReadLine();
+                        Console.ReadKey();
                         break;
                     case ConsoleKey.C:
                         Console.Clear();
                         ReplenishBalance();
-                        Console.ReadLine();
+                        Console.ReadKey();
                         break;
                     case ConsoleKey.D:
                         Console.Clear();
                         ShowTransactions();
-                        Console.ReadLine();
+                        Console.ReadKey();
                         break;
                     case ConsoleKey.E:
                         Console.Clear();
                         ShowIncome();
-                        Console.ReadLine();
+                        Console.ReadKey();
                         break;
                     case ConsoleKey.Escape:
                         return;
                     case ConsoleKey.F:
                         Console.Clear();
                         ShowFreePlaces();
-                        Console.ReadLine();
+                        Console.ReadKey();
                         break;
                     case ConsoleKey.G:
                         Console.Clear();
                         ShowLog();
-                        Console.ReadLine();
+                        Console.ReadKey();
                         break;
                     case ConsoleKey.H:
                         ShowAllCars();
-                        Console.ReadLine();
+                        Console.ReadKey();
                         break;
                 }
             } while (true);
@@ -96,7 +96,7 @@ namespace CarParking
                 Console.WriteLine(String.Format("{0,12}  {1,-12} {2,-50}", "Car Id", "Car type", "Balance"));
                 foreach (ICar car in CarParking.Cars)
                 {
-                    Console.WriteLine(String.Format("{0,12}  {1,-12} {2,-50}", car.CarId, car.CarType.ToString(), car.CarBalance));
+                    Console.WriteLine(String.Format(new CultureInfo("en-US"), "{0,12}  {1,-12} {2,-50:C2}", car.CarId, car.CarType.ToString(), car.CarBalance));
                 }
             }
         }
@@ -313,13 +313,22 @@ namespace CarParking
         private void RemoveCar()
         {
             int id = EnterID(false);
+
             if (CarParking.RemoveCar(id))
             {
                 Console.WriteLine("The car was removed.");
             }
             else
             {
-                Console.WriteLine("The car wasn't removed.");
+                ICar currentCar = CarParking.Cars.Find(c => c.CarId == id);
+                if (currentCar != null)
+                {
+                    Console.WriteLine(String.Format(new CultureInfo("en-US"), "The car wasn't removed. You need to replenish your car balance. Your debt: {0:C2}.  You must pay not less than that!", currentCar.CarBalance));
+                }
+                else
+                {
+                    Console.WriteLine("Your car disappeared!");
+                }
             }
 
         }

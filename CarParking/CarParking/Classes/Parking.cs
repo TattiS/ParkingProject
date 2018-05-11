@@ -1,6 +1,7 @@
 ﻿using CarParking.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Threading;
 
@@ -60,7 +61,7 @@ namespace CarParking.Classes
                     {
                         sum += item.WrittenOffAmount;
                     }
-                    message += String.Format("\t{0:d} at {0:t}\tAmount:\t{1:C3}\n", currentTime, sum);
+                    message += String.Format(new CultureInfo("en-US"), "\t{0,10:d} at {0,10:t}\tAmount:\t{1:C3}\n", currentTime, sum);
                 }
 
             }
@@ -69,19 +70,20 @@ namespace CarParking.Classes
                 return;
             }
 
-            string folderpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            string filepath = Path.Combine(folderpath, "Transactions.log");
+            //string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string folderPath = Environment.CurrentDirectory;
+            string filePath = Path.Combine(folderPath, "Transactions.log");
 
-            if (File.Exists(filepath))
+            if (File.Exists(filePath))
             {
-                using (StreamWriter outputFile = new StreamWriter(filepath, true))
+                using (StreamWriter outputFile = new StreamWriter(filePath, true))
                 {
                     outputFile.WriteLine(message);
                 }
             }
             else
             {
-                using (StreamWriter outputFile = new StreamWriter(filepath))
+                using (StreamWriter outputFile = new StreamWriter(filePath))
                 {
                     outputFile.WriteLine(message);
                 }
@@ -161,10 +163,10 @@ namespace CarParking.Classes
             string result = String.Empty;
             if (history != null)
             {
-                result += String.Format("\t\tHere is the history of transaction for last {0} minute/s:\n \t{1,-15}\t{2,-12}\t{3}\n", minute, "Date &Time", "Car id", "Amount");
+                result += String.Format("\n\n\t\tHere is the history of transaction for last {0} minute/s:\n\n \t{1,-30}\t{2,-12}\t{3}\n", minute, "Date &Time", "Car id", "Amount");
                 foreach (ITransaction t in history)
                 {
-                    result += String.Format("\t{0:d} at {0:T}\t\t{1}\t\t{2:C3}\n", t.Time, t.CarId.ToString(), t.WrittenOffAmount.ToString());
+                    result += String.Format(String.Format(new CultureInfo("en-US"), "\t{0:d} at {0:T}\t\t{1}\t\t{2:C2}\n", t.Time, t.CarId.ToString(), t.WrittenOffAmount));
                 }
             }
             else
@@ -177,13 +179,13 @@ namespace CarParking.Classes
         public string ShowIncome()
         {
             string result = String.Empty;
-            double income = 0;
+            double income = 0.0;
             foreach (ITransaction item in Transactions)
             {
                 income += item.WrittenOffAmount;
             }
 
-            result = "Income: " + income.ToString("");
+            result = String.Format(new CultureInfo("en-US"), "Income: {0:C2}", income);
             return result;
         }
 
@@ -195,7 +197,8 @@ namespace CarParking.Classes
         public string[] ShowLog()
         {
             string[] readLog = new string[] { String.Empty };
-            string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            //string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string folderPath = Environment.CurrentDirectory;
             string filePath = Path.Combine(folderPath, "Transactions.log");
 
             if (File.Exists(filePath))
