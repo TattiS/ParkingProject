@@ -4,7 +4,7 @@ namespace CarParking.Classes
 {
 	class Car : ICar
 	{
-		public Car(int id, double balance, CarType type)
+		public Car(CarType type, int id, double balance=0.0)
 		{
 			CarId = id;
 			CarBalance = balance;
