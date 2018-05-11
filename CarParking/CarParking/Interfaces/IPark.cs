@@ -11,12 +11,12 @@ namespace CarParking.Interfaces
         List<ICar> Cars { get; set; }
         List<ITransaction> Transactions { get; set; }
         bool AddCar(ICar car);
-        bool RemoveCar(ICar car);
-        bool AddToBalance(ICar car, double amount);
+        bool RemoveCar(int id);
+        bool AddToBalance(int id, double amount);
         string ShowTransactionsFor(int minute = 1);
         string ShowIncome();
-        string ShowFreePlaces();
+        int ShowFreePlaces();
         string[] ShowLog();
-
+        bool HasCar(int id);
     }
 }

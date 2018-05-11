@@ -60,6 +60,7 @@
     <Compile Include="Classes\Car.cs" />
     <Compile Include="Classes\Parking.cs" />
     <Compile Include="Classes\Settings.cs" />
+    <Compile Include="Classes\Transaction.cs" />
     <Compile Include="Interfaces\ICar.cs" />
     <Compile Include="Interfaces\IPark.cs" />
     <Compile Include="Interfaces\ITransaction.cs" />

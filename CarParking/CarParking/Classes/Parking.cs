@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 
 namespace CarParking.Classes
 {
@@ -11,9 +12,10 @@ namespace CarParking.Classes
         private Parking()
         {
             Settings.SetSettings(this);
-            Cars = new List<ICar>();
+            Cars = new List<ICar>(this.ParkingSpace);
             Transactions = new List<ITransaction>();
-
+            SetTimerForLog(60000);
+            SetTimerForPayments(TimeOut);
         }
         public static Parking Instance { get { return instance.Value; } }
 
@@ -31,9 +33,42 @@ namespace CarParking.Classes
         public List<ICar> Cars { get; set; }
 
         public List<ITransaction> Transactions { get; set; }
-
-        private void WriteToLog(string message)
+        private void SetTimerForLog(int interval)
         {
+            int timeout = 0;
+            TimerCallback callback = new TimerCallback(WriteToLog);
+            Timer timer = new Timer(callback, null, timeout, interval);
+        }
+        private void SetTimerForPayments(int interval)
+        {
+            int timeout = 0;
+            TimerCallback callback = new TimerCallback(WriteOffRent);
+            Timer timer = new Timer(callback, null, timeout, interval);
+        }
+        private void WriteToLog(object state)
+        {
+            DateTime currentTime = DateTime.Now;
+            DateTime timePoint = currentTime.Subtract(new TimeSpan(0,1,0));
+            string message = String.Empty;
+            if (Transactions != null && Transactions.Count>0)
+            {
+                var history = Transactions.FindAll(t => (t.Time >= timePoint));
+                if (history != null)
+                {
+                    double sum = 0;
+                    foreach (ITransaction item in history)
+                    {
+                        sum += item.WrittenOffAmount;
+                    }
+                    message += String.Format("\t{0:d} at {0:t}\tAmount:\t{1:C3}\n", currentTime, sum);
+                }
+
+            }
+            else
+            {
+                return;
+            }
+
             string folderpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string filepath = Path.Combine(folderpath, "Transactions.log");
 
@@ -54,35 +89,107 @@ namespace CarParking.Classes
 
 
         }
+        private void WriteOffRent(object state)
+        {
+            if (Cars != null)
+            {
+                for (int index = 0; index < Cars.Count; index++)
+                {
+                    ICar currentCar = Cars[index];
+                    if (currentCar != null)
+                    {
+                        double payment = 0.0;
+                        payment = Prices[currentCar.CarType];
+                        if (currentCar.CarBalance < payment)
+                        {
+                            payment = payment * (1 + Fine);
+                        }
+                        currentCar.PayRent(payment);
+                        Transactions.Add(new Transaction(DateTime.Now, currentCar.CarId, payment));
+                    }
+
+                }
+            }
+        }
 
         public bool AddCar(ICar car)
         {
-            throw new NotImplementedException();
+            if (car != null && Cars.Count < Cars.Capacity)
+            {
+                Cars.Add(car);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        public bool RemoveCar(ICar car)
+        public bool RemoveCar(int id)
         {
-            throw new NotImplementedException();
+            ICar thatCar = Cars.Find(c => c.CarId == id);
+            if (thatCar != null && thatCar.CarBalance >= 0)
+            {
+                Cars.Remove(thatCar);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        public bool AddToBalance(ICar car, double amount)
+        public bool AddToBalance(int id, double amount)
         {
-            throw new NotImplementedException();
+            ICar thatCar = Cars.Find(c => c.CarId == id);
+            if (thatCar != null)
+            {
+                thatCar.AddToBalance(amount);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public string ShowTransactionsFor(int minute = 1)
         {
-            throw new NotImplementedException();
+            DateTime currentTime = DateTime.Now;
+            DateTime timePoint = currentTime.Subtract(new TimeSpan(0, minute, 0));
+            var history = Transactions.FindAll(t => (t.Time >= timePoint));
+            string result = String.Empty;
+            if (history != null)
+            {
+                result += String.Format("\t\tHere is the history of transaction for last {0} minute/s:\n \tDate &Time\t\tCar id\t\tAmount\n", minute);
+                foreach (ITransaction t in history)
+                {
+                    result += String.Format("\t{0:d} at {0:t}\t\t{1}\t\t{2:C3}\n", t.Time, t.CarId.ToString(), t.WrittenOffAmount.ToString());
+                }
+            }
+            else
+            {
+                result = "There is no history of transactions for such period.";
+            }
+            return result;
         }
 
         public string ShowIncome()
         {
-            throw new NotImplementedException();
+            string result = String.Empty;
+            double income = 0;
+            foreach (ITransaction item in Transactions)
+            {
+                income += item.WrittenOffAmount;
+            }
+
+            result = "Income: " + income.ToString();
+            return result;
         }
 
-        public string ShowFreePlaces()
+        public int ShowFreePlaces()
         {
-            throw new NotImplementedException();
+            return ParkingSpace - Cars.Count;
         }
 
         public string[] ShowLog()
@@ -100,6 +207,11 @@ namespace CarParking.Classes
             {
                 return null;
             }
+        }
+
+        public bool HasCar(int id)
+        {
+            return (Cars.Find(c => c.CarId == id) != null) ? true : false;
         }
 
         #endregion

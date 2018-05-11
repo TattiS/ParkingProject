@@ -2,10 +2,10 @@
 
 namespace CarParking.Interfaces
 {
-	interface ITransaction
-	{
-		DateTime Time { get; set; }
-		int CarId { get; set; }
-		double WrittenOffAmount { get; set; }
-	}
+    interface ITransaction
+    {
+        DateTime Time { get; }
+        int CarId { get; }
+        double WrittenOffAmount { get; }
+    }
 }
