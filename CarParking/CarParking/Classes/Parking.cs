@@ -48,9 +48,9 @@ namespace CarParking.Classes
         private void WriteToLog(object state)
         {
             DateTime currentTime = DateTime.Now;
-            DateTime timePoint = currentTime.Subtract(new TimeSpan(0,1,0));
+            DateTime timePoint = currentTime.Subtract(new TimeSpan(0, 1, 0));
             string message = String.Empty;
-            if (Transactions != null && Transactions.Count>0)
+            if (Transactions != null && Transactions.Count > 0)
             {
                 var history = Transactions.FindAll(t => (t.Time >= timePoint));
                 if (history != null)
@@ -215,5 +215,6 @@ namespace CarParking.Classes
         }
 
         #endregion
+
     }
 }

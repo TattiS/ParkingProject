@@ -6,39 +6,38 @@ namespace CarParking
 {
     class Program
     {
-        private static Menu menu = new Menu();
+        private static ParkManager manager = new ParkManager();
         static void Main(string[] args)
         {
             Parking carParking = Parking.Instance;
-            carParking.AddCar(new Car(1234, 1220, CarType.BUS));
-            carParking.AddCar(new Car(132, 1245, CarType.MOTOCYCLE));
-            carParking.AddCar(new Car(1356, 1220, CarType.PASSANGER));
-            carParking.AddCar(new Car(5633, 1220, CarType.TRUCK));
-            string[] log = carParking.ShowLog();
-            string output = "There is no such file.";
-            if (log == null)
+            if (carParking != null)
             {
-                Console.WriteLine(output);
+                manager.CarParking = carParking;
             }
-            else
-            {
-                output = String.Empty;
-                for (int index = 0; index < log.Length; index++)
-                {
-                    output += String.Format("{0}. {1}\n", (index + 1), log[index]);
-                }
+            carParking.AddCar(new Car(CarType.BUS, 1234, 1220));
+            carParking.AddCar(new Car(CarType.MOTOCYCLE, 1326, 1245));
+            carParking.AddCar(new Car(CarType.PASSANGER, 1356, 1220));
+            carParking.AddCar(new Car(CarType.TRUCK, 5633, 1220));
 
-                Console.WriteLine(output);
+            try
+            {
+                manager.ShowMenu();
+
             }
-            Console.WriteLine(carParking.HasCar(2456));
-            Console.ReadLine();
+            catch (Exception ex)
+            {
+                //throw;
+                PushMessage(ex.Message);
+            }
+
+
 
         }
 
         private static void PushMessage(string message)
         {
             Console.Clear();
-            Console.WriteLine("It's a message from the function Show menu {0}", message);
+            Console.WriteLine(message);
             Console.ReadKey();
         }
     }
