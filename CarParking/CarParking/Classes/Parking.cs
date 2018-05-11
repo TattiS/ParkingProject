@@ -161,10 +161,10 @@ namespace CarParking.Classes
             string result = String.Empty;
             if (history != null)
             {
-                result += String.Format("\t\tHere is the history of transaction for last {0} minute/s:\n \tDate &Time\t\tCar id\t\tAmount\n", minute);
+                result += String.Format("\t\tHere is the history of transaction for last {0} minute/s:\n \t{1,-15}\t{2,-12}\t{3}\n", minute, "Date &Time", "Car id", "Amount");
                 foreach (ITransaction t in history)
                 {
-                    result += String.Format("\t{0:d} at {0:t}\t\t{1}\t\t{2:C3}\n", t.Time, t.CarId.ToString(), t.WrittenOffAmount.ToString());
+                    result += String.Format("\t{0:d} at {0:T}\t\t{1}\t\t{2:C3}\n", t.Time, t.CarId.ToString(), t.WrittenOffAmount.ToString());
                 }
             }
             else
@@ -183,7 +183,7 @@ namespace CarParking.Classes
                 income += item.WrittenOffAmount;
             }
 
-            result = "Income: " + income.ToString();
+            result = "Income: " + income.ToString("");
             return result;
         }
 
