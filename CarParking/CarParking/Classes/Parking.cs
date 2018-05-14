@@ -15,7 +15,7 @@ namespace CarParking.Classes
             Settings.SetSettings(this);
             Cars = new List<ICar>(this.ParkingSpace);
             Transactions = new List<ITransaction>();
-            SetTimerForLog(60000);
+            SetTimerForLog(LogTimeOut);
             SetTimerForPayments(TimeOut);
         }
         public static Parking Instance { get { return instance.Value; } }
@@ -24,6 +24,10 @@ namespace CarParking.Classes
         #region IPark Members
 
         public int TimeOut { get; set; }
+
+        public int LogTimeOut { get; set; }
+
+        public string LogPath { get; set; }
 
         public Dictionary<CarType, double> Prices { get; set; }
 
@@ -70,20 +74,18 @@ namespace CarParking.Classes
                 return;
             }
 
-            //string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            string folderPath = Environment.CurrentDirectory;
-            string filePath = Path.Combine(folderPath, "Transactions.log");
+            
 
-            if (File.Exists(filePath))
+            if (File.Exists(LogPath))
             {
-                using (StreamWriter outputFile = new StreamWriter(filePath, true))
+                using (StreamWriter outputFile = new StreamWriter(LogPath, true))
                 {
                     outputFile.WriteLine(message);
                 }
             }
             else
             {
-                using (StreamWriter outputFile = new StreamWriter(filePath))
+                using (StreamWriter outputFile = new StreamWriter(LogPath))
                 {
                     outputFile.WriteLine(message);
                 }
@@ -197,13 +199,10 @@ namespace CarParking.Classes
         public string[] ShowLog()
         {
             string[] readLog = new string[] { String.Empty };
-            //string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            string folderPath = Environment.CurrentDirectory;
-            string filePath = Path.Combine(folderPath, "Transactions.log");
 
-            if (File.Exists(filePath))
+            if (File.Exists(LogPath))
             {
-                readLog = File.ReadAllLines(filePath);
+                readLog = File.ReadAllLines(LogPath);
                 return readLog;
             }
             else

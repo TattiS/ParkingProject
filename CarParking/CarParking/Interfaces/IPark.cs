@@ -5,6 +5,8 @@ namespace CarParking.Interfaces
     interface IPark
     {
         int TimeOut { get; set; }
+        int LogTimeOut { get; set; }
+        string LogPath { get; set; }
         Dictionary<CarType, double> Prices { get; set; }
         float Fine { get; set; }
         int ParkingSpace { get; set; }

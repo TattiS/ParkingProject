@@ -10,3 +10,10 @@ C:\Users\Tanusha\Documents\GitHub\ParkingProject\CarParking\CarParking\obj\Debug
 C:\Users\Tanusha\Documents\GitHub\ParkingProject\CarParking\CarParking\obj\Debug\CarParking.csprojResolveAssemblyReference.cache
 C:\Users\Tanusha\Documents\GitHub\ParkingProject\CarParking\CarParking\bin\Debug\CarParking.exe
 C:\Users\Tanusha\Documents\GitHub\ParkingProject\CarParking\CarParking\bin\Debug\CarParking.pdb
+C:\Users\Tanusha\Documents\GitHub\ParkingProject_corrected — копия\CarParking\CarParking\obj\Debug\CarParking.csprojAssemblyReference.cache
+C:\Users\Tanusha\Documents\GitHub\ParkingProject_corrected — копия\CarParking\CarParking\obj\Debug\CarParking.csproj.CoreCompileInputs.cache
+C:\Users\Tanusha\Documents\GitHub\ParkingProject_corrected — копия\CarParking\CarParking\obj\Debug\CarParking.exe
+C:\Users\Tanusha\Documents\GitHub\ParkingProject_corrected — копия\CarParking\CarParking\obj\Debug\CarParking.pdb
+C:\Users\Tanusha\Documents\GitHub\ParkingProject_corrected — копия\CarParking\CarParking\bin\Debug\CarParking.exe.config
+C:\Users\Tanusha\Documents\GitHub\ParkingProject_corrected — копия\CarParking\CarParking\bin\Debug\CarParking.exe
+C:\Users\Tanusha\Documents\GitHub\ParkingProject_corrected — копия\CarParking\CarParking\bin\Debug\CarParking.pdb

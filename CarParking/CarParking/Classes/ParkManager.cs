@@ -7,10 +7,22 @@ namespace CarParking
 {
     class ParkManager
     {
-        private string greeting = "\t\tWelcome to our car park!";
-        private string menuItems = "Choose an action that you'd like to do and \n press the necessary key button:\n\n Press \"A\" - PARK YOUR CAR\n Press \"B\" - REMOVE YOUR CAR\n Press \"C\" - REPLENISH YOUR BALANCE\n Press \"D\" - SHOW TRANSACTIONS FOR LAST MINUTES\n Press \"E\" - SHOW INCOME\n Press \"F\" - SHOW FREE PLACES\n Press \"G\" - SHOW LOG\n Press \"H\" - SHOW ALL CARS\n Press \"Esc\" - EXIT";
-        public Parking CarParking { set; get; }
+        private string greeting;
+        private string menuItems;
 
+        private Parking carParking;
+        public ParkManager()
+        {
+            greeting = "\t\tWelcome to our car park!";
+            menuItems = "Choose an action that you'd like to do and \n press the necessary key button:\n\n Press \"A\" - PARK YOUR CAR\n Press \"B\" - REMOVE YOUR CAR\n Press \"C\" - REPLENISH YOUR BALANCE\n Press \"D\" - SHOW TRANSACTIONS FOR LAST MINUTES\n Press \"E\" - SHOW INCOME\n Press \"F\" - SHOW FREE PLACES\n Press \"G\" - SHOW LOG\n Press \"H\" - SHOW ALL CARS\n Press \"Esc\" - EXIT";
+
+            carParking = Parking.Instance;
+
+            carParking.AddCar(new Car(CarType.BUS, 1234, 1.0));
+            carParking.AddCar(new Car(CarType.MOTOCYCLE, 1326, 1245));
+            carParking.AddCar(new Car(CarType.PASSANGER, 1356, 1220));
+            carParking.AddCar(new Car(CarType.TRUCK, 5633, 1220));
+        }
         public void ShowMenu()
         {
             do
@@ -69,32 +81,32 @@ namespace CarParking
 
         private void ShowFreePlaces()
         {
-            int numberOfPlaces = CarParking.ShowFreePlaces();
-            int engagedPlaces = CarParking.Cars.Count;
+            int numberOfPlaces = carParking.ShowFreePlaces();
+            int engagedPlaces = carParking.Cars.Count;
             Console.WriteLine("\n\t We have {0} free places and {1} engaged places", numberOfPlaces, engagedPlaces);
         }
 
         private void ShowIncome()
         {
             string message = String.Empty;
-            message = CarParking.ShowIncome();
+            message = carParking.ShowIncome();
             Console.WriteLine(message);
         }
 
         private void ShowTransactions()
         {
             string message = String.Empty;
-            message = CarParking.ShowTransactionsFor();
+            message = carParking.ShowTransactionsFor();
             Console.WriteLine(message);
         }
 
         private void ShowAllCars()
         {
-            if (CarParking.Cars != null && CarParking.Cars.Count > 0)
+            if (carParking.Cars != null && carParking.Cars.Count > 0)
             {
                 Console.Clear();
                 Console.WriteLine(String.Format("{0,12}  {1,-12} {2,-50}", "Car Id", "Car type", "Balance"));
-                foreach (ICar car in CarParking.Cars)
+                foreach (ICar car in carParking.Cars)
                 {
                     Console.WriteLine(String.Format(new CultureInfo("en-US"), "{0,12}  {1,-12} {2,-50:C2}", car.CarId, car.CarType.ToString(), car.CarBalance));
                 }
@@ -103,7 +115,7 @@ namespace CarParking
 
         private void ShowAddMenu()
         {
-            if (CarParking.ShowFreePlaces() > 0)
+            if (carParking.ShowFreePlaces() > 0)
             {
                 int id;
                 id = EnterID(true);
@@ -120,7 +132,7 @@ namespace CarParking
                             newCar = MakeCar(CarType.TRUCK, id);
                             if (newCar != null)
                             {
-                                CarParking.AddCar(newCar);
+                                carParking.AddCar(newCar);
                                 Console.WriteLine("Your car was parked successfully!");
                                 return;
                             }
@@ -133,7 +145,7 @@ namespace CarParking
                             newCar = MakeCar(CarType.BUS, id);
                             if (newCar != null)
                             {
-                                CarParking.AddCar(newCar);
+                                carParking.AddCar(newCar);
                                 Console.WriteLine("Your car was parked successfully!");
                                 return;
                             }
@@ -145,7 +157,7 @@ namespace CarParking
                             newCar = MakeCar(CarType.MOTOCYCLE, id);
                             if (newCar != null)
                             {
-                                CarParking.AddCar(newCar);
+                                carParking.AddCar(newCar);
                                 Console.WriteLine("Your car was parked successfully!");
                                 return;
                             }
@@ -157,7 +169,7 @@ namespace CarParking
                             newCar = MakeCar(CarType.PASSANGER, id);
                             if (newCar != null)
                             {
-                                CarParking.AddCar(newCar);
+                                carParking.AddCar(newCar);
                                 Console.WriteLine("Your car was parked successfully!");
                                 return;
                             }
@@ -212,7 +224,7 @@ namespace CarParking
             double amount = 0.0;
             bool result = false;
             string line = String.Empty;
-            ICar currentCar = CarParking.Cars.Find(c => c.CarId == id);
+            ICar currentCar = carParking.Cars.Find(c => c.CarId == id);
             if (currentCar != null)
             {
                 do
@@ -259,7 +271,7 @@ namespace CarParking
                         line = Console.ReadLine();
 
                     } while (String.IsNullOrEmpty(line) || line.Length != 4 || !Int32.TryParse(line, out result));
-                } while (CarParking.HasCar(result));
+                } while (carParking.HasCar(result));
             }
             else
             {
@@ -280,7 +292,7 @@ namespace CarParking
                         line = Console.ReadLine();
 
                     } while (String.IsNullOrEmpty(line) || line.Length != 4 || !Int32.TryParse(line, out result));
-                } while (!CarParking.HasCar(result));
+                } while (!carParking.HasCar(result));
             }
 
             return result;
@@ -291,7 +303,7 @@ namespace CarParking
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.Write("\t\ttransactions.log\n");
             Console.ResetColor();
-            string[] log = CarParking.ShowLog();
+            string[] log = carParking.ShowLog();
             string output = "There is no such file.";
             if (log == null)
             {
@@ -314,13 +326,13 @@ namespace CarParking
         {
             int id = EnterID(false);
 
-            if (CarParking.RemoveCar(id))
+            if (carParking.RemoveCar(id))
             {
                 Console.WriteLine("The car was removed.");
             }
             else
             {
-                ICar currentCar = CarParking.Cars.Find(c => c.CarId == id);
+                ICar currentCar = carParking.Cars.Find(c => c.CarId == id);
                 if (currentCar != null)
                 {
                     Console.WriteLine(String.Format(new CultureInfo("en-US"), "The car wasn't removed. You need to replenish your car balance. Your debt: {0:C2}.  You must pay not less than that!", currentCar.CarBalance));
