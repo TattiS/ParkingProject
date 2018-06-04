@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace CarParking
 {
-    class ParkManager
+    class ParkManager : IDisposable
     {
         private string greeting;
         private string menuItems;
@@ -345,5 +345,9 @@ namespace CarParking
 
         }
 
+        public void Dispose()
+        {
+            carParking.Dispose();
+        }
     }
 }

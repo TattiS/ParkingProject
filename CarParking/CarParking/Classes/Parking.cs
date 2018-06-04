@@ -7,9 +7,11 @@ using System.Threading;
 
 namespace CarParking.Classes
 {
-    class Parking : IPark
+    class Parking : IPark, IDisposable
     {
         private static readonly Lazy<Parking> instance = new Lazy<Parking>(() => new Parking());
+        private Timer timerForLog;
+        private Timer timerForPayments;
         private Parking()
         {
             Settings.SetSettings(this);
@@ -42,13 +44,13 @@ namespace CarParking.Classes
         {
             int timeout = 0;
             TimerCallback callback = new TimerCallback(WriteToLog);
-            Timer timer = new Timer(callback, null, timeout, interval);
+            timerForLog = new Timer(callback, null, timeout, interval);
         }
         private void SetTimerForPayments(int interval)
         {
             int timeout = 0;
             TimerCallback callback = new TimerCallback(WriteOffRent);
-            Timer timer = new Timer(callback, null, timeout, interval);
+            timerForPayments = new Timer(callback, null, timeout, interval);
         }
         private void WriteToLog(object state)
         {
@@ -74,7 +76,7 @@ namespace CarParking.Classes
                 return;
             }
 
-            
+
 
             if (File.Exists(LogPath))
             {
@@ -218,5 +220,10 @@ namespace CarParking.Classes
 
         #endregion
 
+        public void Dispose()
+        {
+            this.timerForLog.Dispose();
+            this.timerForPayments.Dispose();
+        }
     }
 }
